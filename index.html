@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Handler Login</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles/index.css">
+    <link rel="icon" type="image/png" href="images/logo.png">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+          <img src="images/logo.png" alt="logo">
+            <h2>Customer Care Agent Login</h2>
+            <form id="loginForm">
+                <label for="email">Email:</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+                
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+                
+                <button type="submit">Login</button>
+            </form>
+            <p id="error-message"></p>
+        </div>
+        <!-- Success & Error Popups -->
+        <div id="popup" class="popup">
+            <div class="popup-content">
+              <span id="popup-icon"></span>
+              <p id="popup-message"></p>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="scripts/index.js"></script>
+    <script>
+    // Register Service Worker
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js")
+      .then(() => console.log("Service Worker Registered"))
+      .catch((err) => console.error("Service Worker Registration Failed", err));
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Care Dashboard</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <header>
+        <img src="images/logo.png" alt="Logo" class="logo">
+        <h1>Customer Care Dashboard</h1>
+        <button id="logoutBtn">Logout</button>
+        <div class="chat-icon">
+            <a href="chart-list.html"><img src="images/chat.png" alt="Chat"></a>
+        </div>
+    </header>
+
+    <nav>
+        <button class="tab-btn active" data-tab="users">Users</button>
+        <button class="tab-btn" data-tab="agents">Agents</button>
+        <button class="tab-btn" data-tab="support">Support Requests</button>
+    </nav>
+
+    <main>
+        <!-- Users Section -->
+        <section id="users" class="tab-content active">
+            <h2>Users</h2>
+            <input type="text" id="searchUsers" placeholder="Search by ID Number 🔎" onkeyup="searchUsers()">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Number</th>
+                        <th>Phone Number</th>
+                        <th>Agent Number</th>
+                        <th>Store Number</th>
+                        <th>M-Pesa Number</th>
+                        <th>Secret PIN</th>
+                    </tr>
+                </thead>
+                <tbody id="users-list"></tbody>
+            </table>
+        </section>
+
+        <!-- Agents Section -->
+        <section id="agents" class="tab-content">
+            <h2>Agents</h2>
+            <input type="text" id="searchAgents" placeholder="Search by ID Number 🔎" onkeyup="searchAgents()">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>ID Number</th>
+                        <th>Referral Code</th>
+                        <th>Referred Users</th>
+                    </tr>
+                </thead>
+                <tbody id="agents-list"></tbody>
+            </table>
+        </section>
+
+        <!-- Support Requests Section -->
+        <section id="support" class="tab-content">
+            <h2>Support Requests</h2>
+            <input type="text" id="searchRequests" placeholder="Search by ID Number 🔎" onkeyup="searchRequests()">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Number</th>
+                        <th>Phone Number</th>
+                        <th>Request Type</th>
+                        <th>Timestamp</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="support-list"></tbody>
+            </table>
+        </section>
+    </main>
+
+    <!-- Use module type for ES6 imports -->
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="scripts/dash.js"></script>
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('firebase-messaging-sw.js')
+            .then((registration) => {
+                console.log('Service Worker registration successful with scope: ', registration.scope);
+            })
+            .catch((err) => {
+                console.error('Service Worker registration failed: ', err);
+            });
+    }
+</script>
+
+</body>
+</html>

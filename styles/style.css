@@ -1,0 +1,214 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+.chat-icon {
+    position: flex;
+    top: 10px;
+    right: 10px;
+}
+
+.chat-icon img {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+/* Dashboard Container */
+.dashboard-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+/* Header Section */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: goldenrod;
+    padding: 15px;
+    border-radius: 5px;
+    color: white;
+}
+
+.logo {
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+}
+
+/* Logout Button */
+#logoutBtn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+}
+#logoutBtn:hover {
+    background-color: darkred;
+}
+
+/* Tabs */
+nav {
+    text-align: center;
+    justify-items: center;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 15px;
+}
+
+.tab-btn {
+    text-align: center;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    background-color: goldenrod;
+    color: white;
+    font-weight: bold;
+    margin-right: 5px;
+    border-radius: 5px;
+}
+.tab-btn.active {
+    background-color: green;
+}
+
+/* Tab Content */
+.tab-content {
+    display: none;
+    margin-top: 20px;
+}
+.tab-content.active {
+    display: block;
+}
+
+.tab-btn:hover {
+    background-color: #16a085;
+}
+
+/* Search Box */
+input[type="text"] {
+    float: right;
+    width: 30%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 2px solid green;
+    border-radius: 5px;
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+th {
+    background-color: #28a745;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+button {
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+button[onclick^="enablePinEdit"] {
+    background-color: orange;
+    color: white;
+}
+
+button[onclick^="resetUserPin"] {
+    background-color: red;
+    color: white;
+}
+
+button[onclick^="resolveRequest"] {
+    background-color: green;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    nav {
+        flex-direction: column;
+    }
+
+    .tab-btn {
+        width: 100%;
+    }
+
+    th, td {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    input[type="text"] {
+        font-size: 14px;
+    }
+}
+/* Success & Error Popups */
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    border-radius: 5px;
+}
+
+.popup.success {
+    border-left: 5px solid green;
+}
+
+.popup.error {
+    border-left: 5px solid red;
+}
+
+.popup i {
+    font-size: 24px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.popup.show {
+    display: block;
+}
