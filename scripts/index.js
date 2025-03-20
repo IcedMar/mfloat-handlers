@@ -11,44 +11,41 @@ import {
 // Initialize Firestore
 const db = getFirestore(app);
 
-document.getElementById("login-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
+document.addEventListener("DOMContentLoaded", () => {
+    const loginForm = document.getElementById("loginForm"); // Fix: Corrected the ID
 
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    if (!loginForm) {
+        console.error("Login form not found! Check if the ID 'loginForm' exists in your HTML.");
+        return;
+    }
 
-    try {
-        // Query Firestore to check if user exists in "handlers" collection
-        const handlerRef = doc(db, "handlers", email);
-        const handlerSnap = await getDoc(handlerRef);
+    loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-        if (handlerSnap.exists()) {
-            const handlerData = handlerSnap.data();
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
 
-            if (handlerData.role === "handler") {
-                // Store user details in session storage
+        try {
+            const handlerRef = doc(db, "handlers", email);
+            const handlerSnap = await getDoc(handlerRef);
+
+            if (handlerSnap.exists() && handlerSnap.data().role === "handler") {
                 sessionStorage.setItem("handlerEmail", email);
-                sessionStorage.setItem("handlerName", handlerData.name);
-
-                // Store successful login in logs
+                sessionStorage.setItem("handlerName", handlerSnap.data().name);
                 storeLog(email, "Success", "User logged in successfully.");
-
-                // Redirect to dashboard
                 window.location.href = "dashboard.html";
             } else {
-                storeLog(email, "Failed", "User is not assigned as a handler.");
+                storeLog(email, "Failed", "User not found or not a handler.");
                 showPopup("Access denied: You are not assigned as a handler.");
             }
-        } else {
-            storeLog(email, "Failed", "User not found in the handlers list.");
-            showPopup("User not found in the handlers list.");
+        } catch (error) {
+            console.error("Login failed:", error.message);
+            storeLog(email, "Failed", error.message);
+            showPopup("Login failed: " + error.message);
         }
-    } catch (error) {
-        console.error("Login failed:", error.message);
-        storeLog(email, "Failed", error.message);
-        showPopup("Login failed: " + error.message);
-    }
+    });
 });
+
 
 function showPopup(message, type, callback = null) {
     const popup = document.getElementById("popup");
