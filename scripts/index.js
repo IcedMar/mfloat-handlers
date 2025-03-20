@@ -1,47 +1,53 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { app } from "../firebase-config.js";
+import { 
+    getFirestore, 
+    doc, 
+    getDoc, 
+    collection, 
+    addDoc, 
+    serverTimestamp 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAKNdNQrZRs1Fx7FQnTw3GABYbrqihcoMk",
-  authDomain: "the-m-float.firebaseapp.com",
-  projectId: "the-m-float",
-  storageBucket: "the-m-float.firebasestorage.app",
-  messagingSenderId: "91662213348",
-  appId: "1:91662213348:web:d437c5cea934a21e1c4cf1"
-};
+// Initialize Firestore
+const db = getFirestore(app);
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-// Login Form Handling
-document.getElementById("loginForm").addEventListener("submit", function (event) {
-    event.preventDefault();
+document.getElementById("login-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
-    const errorMessage = document.getElementById("error-message");
 
-    signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            // Login successful
-            showPopup("Login Successful!", "success", () => {
-                window.location.href = "dashboard.html"; // Redirect to dashboard
-            });
+    try {
+        // Query Firestore to check if user exists in "handlers" collection
+        const handlerRef = doc(db, "handlers", email);
+        const handlerSnap = await getDoc(handlerRef);
 
-        })
-        .catch((error) => {
-            // Display error message
-            let message = "Invalid email or password!";
-            if(error.code === 'auth/user-not-found'){
-                message = "User not found.";
-            } else if (error.code === 'auth/wrong-password'){
-                message = "Incorrect password.";
+        if (handlerSnap.exists()) {
+            const handlerData = handlerSnap.data();
+
+            if (handlerData.role === "handler") {
+                // Store user details in session storage
+                sessionStorage.setItem("handlerEmail", email);
+                sessionStorage.setItem("handlerName", handlerData.name);
+
+                // Store successful login in logs
+                storeLog(email, "Success", "User logged in successfully.");
+
+                // Redirect to dashboard
+                window.location.href = "dashboard.html";
+            } else {
+                storeLog(email, "Failed", "User is not assigned as a handler.");
+                showPopup("Access denied: You are not assigned as a handler.");
             }
-
-            errorMessage.textContent = message;
-            showPopup(message, "error");
-        });
+        } else {
+            storeLog(email, "Failed", "User not found in the handlers list.");
+            showPopup("User not found in the handlers list.");
+        }
+    } catch (error) {
+        console.error("Login failed:", error.message);
+        storeLog(email, "Failed", error.message);
+        showPopup("Login failed: " + error.message);
+    }
 });
 
 function showPopup(message, type, callback = null) {
@@ -66,4 +72,18 @@ function showPopup(message, type, callback = null) {
         popup.style.display = "none";
         if (callback) callback(); // Execute callback if provided
     }, 2000);
+}
+
+// Function to store login logs in Firestore
+async function storeLog(email, status, message) {
+    try {
+        await addDoc(collection(db, "logs"), {
+            email: email,
+            status: status,
+            message: message,
+            timestamp: serverTimestamp(),
+        });
+    } catch (error) {
+        console.error("Error storing log:", error.message);
+    }
 }

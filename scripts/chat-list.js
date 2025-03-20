@@ -1,12 +1,7 @@
-// Firebase Configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyAKNdNQrZRs1Fx7FQnTw3GABYbrqihcoMk",
-    authDomain: "the-m-float.firebaseapp.com",
-    projectId: "the-m-float",
-    storageBucket: "the-m-float.firebasestorage.app",
-    messagingSenderId: "91662213348",
-    appId: "1:91662213348:web:d437c5cea934a21e1c4cf1"
-};
+import { auth, app, firebaseConfig } from "../firebase-config.js";
+import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
